@@ -35,12 +35,12 @@
 | City Wok DC (Domain Controller) | `192.168.1.111` | Win Server 2022 | WordPress port 80 |
 | City Sushi FS | `192.168.1.12` | Win Server 2022 | FTP 20/21 |
 
-> ⚠️ **CRITICAL:** The Flask app on UFO (`192.168.1.14`) uses the **database on my machine**. If my box goes down, UFO goes with it — I'm effectively protecting **2 scored services**.
+>  **CRITICAL:** The Flask app on UFO (`192.168.1.14`) uses the **database on my machine**. If my box goes down, UFO goes with it — I'm effectively protecting **2 scored services**.
 
-> ⚠️ **CRITICAL:** Scoreboard IP rotates — it cannot be allowlisted. Port 22 must stay open to **all** inbound.
+>  **CRITICAL:** Scoreboard IP rotates — it cannot be allowlisted. Port 22 must stay open to **all** inbound.
 
-- ✅ **Scoreboard:** `http://172.16.215.250` — log in with team credentials from the team channel
-- ✅ **PCR (Password Change Request) format:** `User,password` on separate lines — submit after **every** password rotation
+-  **Scoreboard:** `http://172.16.215.250` — log in with team credentials from the team channel
+-  **PCR (Password Change Request) format:** `User,password` on separate lines — submit after **every** password rotation
 
 ---
 
@@ -90,13 +90,13 @@ sudo ufw enable
 sudo ufw status verbose
 ```
 
-> ⚠️ Do **NOT** open 8080, 3306, or 445 — not a scored service, only attack surface.
+>  Do **NOT** open 8080, 3306, or 445 — not a scored service, only attack surface.
 
 ---
 
 ## 4. Phase 1 — First 30 Minutes (2:00–2:30 PM)
 
-> ⚠️ **Time is critical. Execute in this exact order. Do not skip steps.**
+>  **Time is critical. Execute in this exact order. Do not skip steps.**
 
 ### Step 1 — Verify You Are On The Right Box
 
@@ -153,7 +153,7 @@ This script automatically:
 - Restarts SSH and web services
 - Downloads `pspy64` and `linpeas.sh` to the current directory
 
-> ⚠️ **After `firstrun.sh` — VERIFY SSH hardening actually applied:**
+>  **After `firstrun.sh` — VERIFY SSH hardening actually applied:**
 
 ```bash
 sshd -T | grep -E 'permitrootlogin|passwordauthentication|x11forwarding|allowtcpforwarding'
@@ -169,7 +169,7 @@ bash passwd.sh | tee /tmp/passwords.txt
 
 Output format: `USER,PASSWORD` — save this somewhere safe (phone notes, paper).
 
-> ⚠️ **IMMEDIATELY after `passwd.sh` — submit a PCR to the scoreboard or you will fail SSH service checks.**
+>  **IMMEDIATELY after `passwd.sh` — submit a PCR to the scoreboard or you will fail SSH service checks.**
 
 Go to `http://172.16.215.250`, log in, and submit the PCR in this format:
 
@@ -186,7 +186,7 @@ One line per user. Submit **all** users that could be used for SSH scoring.
 bash ufw.sh   # use the edited version with port 22 only
 ```
 
-> ⚠️ **CRITICAL** — before closing your current session, open a **second terminal** and verify SSH still works:
+>  **CRITICAL** — before closing your current session, open a **second terminal** and verify SSH still works:
 
 ```bash
 ssh user@192.168.1.13
@@ -342,7 +342,7 @@ bash krs.sh &
 
 Runs every 10 seconds, killing processes that look like reverse shells (`nc`, `netcat`, `bash`/`python`/`perl` with external IPs). Runs in the background.
 
-> ⚠️ `krs.sh` will **NOT** catch Living Off the Land attacks — see [Section 6](#6-living-off-the-land-lotl-defense).
+>  `krs.sh` will **NOT** catch Living Off the Land attacks — see [Section 6](#6-living-off-the-land-lotl-defense).
 
 ### Rootkit Check
 
@@ -415,11 +415,11 @@ Visible in `pspy64` and `ps aux`. Look for `python3 -c` with network connections
 
 ### Detection Strategy
 
-- ✅ `pspy64` catches everything spawning from cron or other processes without needing root
-- ✅ `ss -tunp` shows all active connections with process — bash/python connecting to an external IP is the signal
-- ✅ `diff /tmp/baseline_ps.txt` against current `ps aux` to spot new processes
-- ✅ Check `/tmp` and `/dev/shm` for staged payloads
-- ✅ `md5sum -c /tmp/hashes.txt` to detect replaced binaries
+-  `pspy64` catches everything spawning from cron or other processes without needing root
+-  `ss -tunp` shows all active connections with process — bash/python connecting to an external IP is the signal
+-  `diff /tmp/baseline_ps.txt` against current `ps aux` to spot new processes
+-  Check `/tmp` and `/dev/shm` for staged payloads
+-  `md5sum -c /tmp/hashes.txt` to detect replaced binaries
 
 ---
 
@@ -477,7 +477,7 @@ Visible in `pspy64` and `ps aux`. Look for `python3 -c` with network connections
 
 Contact **@Green Team** in your team channel. Request a snapshot revert. Costs 500 points but better than losing 5 points/minute indefinitely.
 
-> ⚠️ After revert — redo **ALL** hardening from Phase 1. The machine goes back to its default vulnerable state.
+>  After revert — redo **ALL** hardening from Phase 1. The machine goes back to its default vulnerable state.
 
 ### Locked Yourself Out of SSH
 
@@ -493,11 +493,11 @@ Contact **@Green Team** in your team channel. Request a snapshot revert. Costs 5
 
 Scoring engine checks SSH port 22 every minute. **5 points per successful check.** After 5 consecutive failures: **−5 points per check.**
 
-> ⚠️ **EVERY** password change requires a PCR submission or service checks will fail.
+>  **EVERY** password change requires a PCR submission or service checks will fail.
 
-> ⚠️ Scoreboard IP rotates — it cannot be blocked — port 22 must stay open to all.
+>  Scoreboard IP rotates — it cannot be blocked — port 22 must stay open to all.
 
-> ⚠️ Snapshot revert costs 500 points — last resort only.
+>  Snapshot revert costs 500 points — last resort only.
 
 **PCR format** at `http://172.16.215.250`:
 
@@ -506,8 +506,8 @@ root,YourNewPassword
 otheruser,TheirNewPassword
 ```
 
-- ✅ After submitting a PCR — wait 1–2 minutes and check the scoreboard to confirm service checks are passing
-- ✅ Keep `/tmp/passwords.txt` from `passwd.sh` output — that's your source of truth for current creds
+-  After submitting a PCR — wait 1–2 minutes and check the scoreboard to confirm service checks are passing
+-  Keep `/tmp/passwords.txt` from `passwd.sh` output — that's your source of truth for current creds
 
 ---
 
@@ -520,7 +520,7 @@ Injects are business emails from a fictional CEO/CTO/employee asking technical o
 - Tailor the response to the audience — CEO gets an executive summary, CTO gets technical detail
 - Be clear, concise, and professional
 
-> ⚠️ Don't let injects distract you from machine defense — your SSH service must stay up.
+>  Don't let injects distract you from machine defense — your SSH service must stay up.
 
 ---
 
@@ -594,9 +594,9 @@ REVERT=true bash pom.sh     # restore PAM from backup
 
 Your machine (Tweek Bros Coffeehouse) is the easiest scored service to defend — SSH on a Debian box. The main risk is accidentally breaking it yourself. Follow the order, verify SSH works after every change, submit a PCR after every password rotation, and you'll hold your points.
 
-- ✅ Run `inventory.sh` first — know your machine before touching anything
-- ✅ Submit a PCR after `passwd.sh` — do not skip this
-- ✅ Keep `pspy64` and `tail -f auth.log` running in tmux all competition
+-  Run `inventory.sh` first — know your machine before touching anything
+-  Submit a PCR after `passwd.sh` — do not skip this
+-  Keep `pspy64` and `tail -f auth.log` running in tmux all competition
 - ✅ Check `authorized_keys` and crontabs every 20–30 minutes
 - ✅ If something breaks — the Proxmox console is your way back in
 
