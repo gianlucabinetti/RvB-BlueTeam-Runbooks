@@ -27,9 +27,9 @@
 
 >  If DNS goes down you lose **5 points every minute**. Keep it up no matter what.
 
->  After changing any password — submit a **PCR** on the scoreboard or DNS checks will fail.
+>  After changing any password - submit a **PCR** on the scoreboard or DNS checks will fail.
 
->  If anything breaks — ping the team chat; we have your back.
+>  If anything breaks - ping the team chat; we have your back.
 
 ---
 
@@ -37,17 +37,17 @@
 
 | Time | Action |
 |---|---|
-| 1:30 PM | Briefing — get VPN creds, meet team |
-| **2:00 PM** | **COMPETITION STARTS — execute steps below immediately** |
+| 1:30 PM | Briefing - get VPN creds, meet team |
+| **2:00 PM** | **COMPETITION STARTS - execute steps below immediately** |
 | 4:30 PM | Competition ends |
 
 ---
 
-## Phase 1 — First 30 Minutes
+## Phase 1 - First 30 Minutes
 
 >  **Do everything in this exact order. Do not skip steps.**
 
-### Step 1 — Connect to Your Machine
+### Step 1 - Connect to Your Machine
 
 VPN on → open terminal → SSH into your machine:
 
@@ -57,13 +57,13 @@ ssh <username>@192.168.1.15
 
 Username and password will be provided in your team channel at competition start.
 
-### Step 2 — Run Inventory (See What's On The Machine)
+### Step 2 - Run Inventory (See What's On The Machine)
 
 ```bash
 bash inventory.sh | tee /tmp/baseline.txt
 ```
 
-This shows all open ports, running services, and users. Save it as your baseline and read it carefully — anything unexpected is suspicious. You'll compare this baseline against active ports, services, and users later to flag anything that wasn't there before.
+This shows all open ports, running services, and users. Save it as your baseline and read it carefully - anything unexpected is suspicious. You'll compare this baseline against active ports, services, and users later to flag anything that wasn't there before.
 
 If you need to pull the script down first:
 
@@ -71,7 +71,7 @@ If you need to pull the script down first:
 curl https://pastebin.com/raw/<your-paste-id> -o inventory.sh
 ```
 
-### Step 3 — Run `firstrun.sh` (Installs Tools and Hardens SSH)
+### Step 3 - Run `firstrun.sh` (Installs Tools and Hardens SSH)
 
 ```bash
 bash firstrun.sh
@@ -79,7 +79,7 @@ bash firstrun.sh
 
 This automatically installs security tools, backs up important files, hardens the SSH config, and downloads monitoring tools. Let it finish completely before moving on.
 
-### Step 4 — Rotate All Passwords
+### Step 4 - Rotate All Passwords
 
 ```bash
 bash passwd.sh | tee /tmp/passwords.txt
@@ -87,7 +87,7 @@ bash passwd.sh | tee /tmp/passwords.txt
 
 Saves new passwords to `/tmp/passwords.txt`. Open that file and save the passwords somewhere safe, like your phone notes.
 
-> ⚠️ **IMMEDIATELY after** — go to `http://172.16.215.250`, log in, and submit a PCR:
+>  **IMMEDIATELY after** - go to `http://172.16.215.250`, log in, and submit a PCR:
 
 ```
 root,NewPasswordHere
@@ -119,9 +119,9 @@ Then run it:
 bash ufw.sh
 ```
 
->  After enabling the firewall — open a **second terminal** and verify you can still SSH in **before** closing your first session.
+>  After enabling the firewall - open a **second terminal** and verify you can still SSH in **before** closing your first session.
 
-### Step 6 — Verify DNS is Running
+### Step 6 - Verify DNS is Running
 
 ```bash
 systemctl status bind9
@@ -178,7 +178,7 @@ systemctl status bind9
 ss -tunp | grep :53
 ```
 
-If DNS is down — restart immediately:
+If DNS is down - restart immediately:
 
 ```bash
 systemctl restart bind9
@@ -196,7 +196,7 @@ crontab -l
 ls /etc/cron.d/
 ```
 
-Anything new that wasn't there before is suspicious — tell the team.
+Anything new that wasn't there before is suspicious - tell the team.
 
 ### Check Active Connections
 
@@ -204,7 +204,7 @@ Anything new that wasn't there before is suspicious — tell the team.
 ss -tunp
 ```
 
-Look for any outbound connections to unknown external IPs. If you see `bash` or `python` connecting out — tell the team immediately.
+Look for any outbound connections to unknown external IPs. If you see `bash` or `python` connecting out - tell the team immediately.
 
 ### Check Login Attempts
 
@@ -224,7 +224,7 @@ Shows how many successful and failed SSH attempts. A high failed count means the
 journalctl -u bind9 -n 50
 ```
 
-Shows the last 50 log lines — look for error messages and tell the team what you see.
+Shows the last 50 log lines - look for error messages and tell the team what you see.
 
 ### DNS Config Check
 
@@ -232,7 +232,7 @@ Shows the last 50 log lines — look for error messages and tell the team what y
 named-checkconf
 ```
 
-Checks the DNS config for errors. If it returns nothing — the config is fine. If it shows errors — tell the team.
+Checks the DNS config for errors. If it returns nothing - the config is fine. If it shows errors — tell the team.
 
 ### DNS Not Responding on Port 53
 
@@ -249,11 +249,11 @@ Make sure the firewall allows port 53 and restart the service.
 
 ### Machine Completely Broken
 
-Request a snapshot revert from **@Green Team** in your team channel. Costs 500 points but better than losing 5 points per minute. After revert — redo **ALL** steps from Phase 1.
+Request a snapshot revert from **@Green Team** in your team channel. Costs 500 points but better than losing 5 points per minute. After revert - redo **ALL** steps from Phase 1.
 
 ### Locked Out of SSH
 
-Use the Proxmox console — go to `https://proxmox.sdc.cpp`, find **Tegridy Farms**, and open the console. You can access the machine directly without SSH.
+Use the Proxmox console go to `https://proxmox.sdc.cpp`, find **Tegridy Farms**, and open the console. You can access the machine directly without SSH.
 
 ### Red Team Active on Your Machine
 
